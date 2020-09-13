@@ -24,10 +24,10 @@ from watchdog.events import PatternMatchingEventHandler
 
 
 class Server:
-    def __init__(self, host='127.0.0.1', port=8000):
+    def __init__(self, host='127.0.0.1', port=8000, content_dir='web'):
         self.host = host
         self.port = port
-        self.content_dir = 'web'
+        self.content_dir = content_dir
         self.status_codes = {
             100: 'Continue',
             101: 'Switching Protocols',
@@ -117,7 +117,7 @@ class Server:
 
         self.observer.schedule(
             event_handler=event_handler,
-            path="./web",
+            path=f"./{self.content_dir}",
             recursive=True
         )
 
@@ -194,8 +194,6 @@ class Server:
                             with open(filepath, 'rb') as f:
                                 response_body = f.read()
 
-                                f.close()
-
                             response_line = self.create_response_line(status_code=200)
                             response_header = self.create_headers()
                                         
@@ -222,7 +220,6 @@ class Server:
                         conn.close()
 
                         break
-                
                     else:
                         print(f'Unsupported request method: {req_method}')
                 
@@ -262,6 +259,17 @@ class Server:
 
 
 if __name__ == "__main__":
-    server = Server()
+    args = sys.argv
 
-    server.start()
+    if len(args) == 2:
+        if args[1] != 'help':
+            sv = Server(content_dir=args[1])
+            sv.start()
+        else:
+            print("""Usage: server.py [web_file_directory]
+    web_file_directory = The directory in which you have your web files. The path must be relative 
+                         to the directory in which server.py is stored.""")
+    
+    else:
+        sv = Server()
+        sv.start()
