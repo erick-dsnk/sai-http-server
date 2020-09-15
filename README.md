@@ -23,6 +23,5 @@ An easy-to-use Local HTTP Server written in Python using the Socket and Selenium
 #### Installation
 **Check out SETUP.md to find out how to make this server available system-wide!**
 
-
 ## Usage
 Open a command prompt in the directory in which you have the files and type `server.py`. You're done! You can now start editing your files for your website inside of the `web` directory and the server will display them at `http://127.0.0.1:8000`!
