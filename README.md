@@ -16,9 +16,11 @@ An easy-to-use Local HTTP Server written in Python using the Socket and Selenium
 ## Installation & Requirements
 #### Requirements:
 * Python 3.x, you can install by visiting http://www.python.org
-* Selenium python package, install using pip (Python's package manager): `pip install selenium`
-* Watchdog python package (it helps with watching for file changes in the directory of choice), install with: `pip install selenium` 
-* Socket python package, install with: `pip install socket`
+* Selenium python package
+* Watchdog python package (it helps with watching for file changes in the directory of choice)
+* Socket python package
+
+**You can install all of them using `python -m install requirements.txt`**
 
 #### Installation
 **Check out SETUP.md to find out how to make this server available system-wide!**
