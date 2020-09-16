@@ -9,7 +9,7 @@ An easy-to-use Local HTTP Server written in Python using the Socket and Selenium
 ## Features
 * Easy to use and fast to set up
 * It detects file changes and conveniently refreshes your Chrome tab for you (Support for other browsers coming soon!)
-* Supports all requests
+* Supports all basic HTTP request methods (GET and POST)
 * After following the instructions in SETUP.md, you will be able to start up a server in any directory just by typing `server.py` in your terminal!
 
 

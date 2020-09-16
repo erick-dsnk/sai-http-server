@@ -191,6 +191,8 @@ class Server:
 
                     req_method = req_line.split(' ')[0]
 
+                    req_body = lines[-1]
+
                     if req_method == 'GET':
                         response_line = b""
                         response_header = b""
@@ -239,6 +241,56 @@ class Server:
                         conn.close()
 
                         break
+
+                    elif req_method == 'POST':
+                        response_line = b""
+                        response_header = b""
+                        blank_line = b"\r\n"
+                        response_body = b""
+
+
+                        requested_file = req_line.split(' ')[1]
+
+                        if requested_file == '/':
+                            requested_file = '/index.html'
+                        else:
+                            pass
+
+                        filepath = self.content_dir + requested_file
+
+                        print(f'Initiating webpage {filepath}')
+
+                        try:
+                            with open(filepath, 'rb') as f:
+                                response_body = f.read()
+
+                            response_line = self.create_response_line(status_code=200)
+                            response_header = self.create_headers()
+                                        
+                        
+                        except Exception as e:
+                            print(f'Something went wrong while trying to serve {filepath}')
+
+                            response_line = self.create_response_line(status_code=404)
+                            response_header = self.create_headers()
+                            response_body = "<h1>{} {}</h1>".format(
+                                404,
+                                self.status_codes[404]
+                            ).encode('utf8')
+
+                        response = b""
+
+                        response += response_line
+                        response += response_header
+                        response += blank_line
+                        response += response_body
+
+                        conn.send(response)
+
+                        conn.close()
+
+                        break
+
                     else:
                         print(f'Unsupported request method: {req_method}')
                 
