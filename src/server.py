@@ -21,6 +21,8 @@ from selenium import webdriver
 from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
 from os.path import exists
+import click
+import os
 
 
 if not exists('server.conf'):
@@ -121,7 +123,7 @@ class Server:
             'Content-Type': 'text/html',
             'Connection': 'keep-alive'
         }
-        self.driver = webdriver.Chrome()
+        self.driver = webdriver.Chrome(os.path.join(os.path.abspath(os.getcwd()), 'src', 'chromedriver.exe'))
         
         event_handler = PatternMatchingEventHandler(
             patterns="*",
@@ -329,23 +331,26 @@ class Server:
         return headers.encode('utf8')
 
 
-if __name__ == "__main__":
-    args = sys.argv
 
-    sv = None
+@click.group()
+def cli():
+    pass
 
-    if len(args) == 2:
-        if args[1] != 'help':
-            sv = Server(host=get_config()[0], port=int(get_config()[1]), content_dir=args[1])
 
-        else:
-            print("""Usage: server.py [web_file_directory]
-    web_file_directory = The directory in which you have your web files. The path must be relative 
-                         to the directory in which server.py is stored.
-    
-    Modify the server.conf file to use another IP address or port for your local server!""")
-    
-    else:
-        sv = Server(host=get_config()[0], port=int(get_config()[1]))
-    
+@cli.command()
+def run():
+    '''
+    Starts the server in the current working directory and generates a config file
+    '''
+    sv = Server(host=get_config()[0], port=int(get_config()[1]))
+
     sv.start()
+
+
+@cli.command()
+def source():
+    '''
+    Returns the link to the source code of this package.
+    '''
+
+    click.echo("Source code: https://github.com/erick-dsnk/sai-http-server")
